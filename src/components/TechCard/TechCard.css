@@ -1,0 +1,22 @@
+.tech-card{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #303030;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17px;
+  width: 90px;
+  height: 60px;
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 768px){
+  .tech-card{
+    font-size: 12px;
+    line-height: 15px;
+    width: 84px;
+    height: 57px;
+   }
+ }

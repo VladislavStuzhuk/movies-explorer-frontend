@@ -1,0 +1,139 @@
+.about{
+  width: calc(100% - 140px);
+  margin: 0 auto;
+}
+.about__header{
+  color: #fff;
+  padding-bottom: 23px;
+  border-bottom: 1px solid #dadada;
+  margin: 110px 0 70px ;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 26.63px;
+}
+.about__info{
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+}
+.about__subheader{
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24.2px;
+  margin: 0;
+  color: #fff;
+}
+.about__description{
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: #fff;
+  margin: 26px 0 0;
+}
+.about__time-laps{
+  margin: 110px 0;
+  width: 100%;
+  display: flex;
+}
+.about__back-end{
+  width: 20%;
+  text-align: center;
+}
+.about__scale{
+  display: flex;
+  margin: 0;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 16.94px;
+  font-weight: 400;
+}
+.about__scale_green-block{
+  color: #000;
+  background-color: #3DDC84;
+}
+.about__front-end{
+  width: 80%;
+  text-align: center;
+}
+.about__scale_gray-block{
+  color: #fff;
+  background-color: #303030;
+}
+.about__tech{
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 500;
+  color: #8B8B8B;
+  margin: 14px 0 0;
+}
+
+@media screen and (max-width: 768px){
+  .about{  
+    width: calc(100% - 100px);
+  }
+  .about__header{
+    margin: 90px 0 70px;
+  }
+  .about__info{
+    gap: 30px;
+  }
+  .about__description{
+    font-size: 12px;
+    line-height: 18px;
+    margin: 22px 0 0;
+  }
+  .about__time-laps{
+    margin: 93px 0 90px;
+  }
+  .about__back-end{
+    width: 140px;
+  }
+  .about__front-end{
+    width: calc(100% - 140px);
+  }
+}
+@media screen and (max-width: 600px){
+  .about__info{
+    flex-direction: column;
+    gap: 56px;
+  }
+}
+
+@media screen and (max-width: 500px){
+  .about{  
+    width: calc(100% - 36px);
+  }
+  .about__header{
+    padding-bottom: 28px;
+    margin: 70px 0 60px;
+    font-size: 18px;
+    line-height: 21.78px;
+  }
+  .about__subheader{
+    font-size: 18px;
+    line-height: 21.78px;
+  }
+  .about__description{
+    font-size: 11px;
+    line-height: 16px;
+    margin: 16px 0 0;
+  }
+  .about__scale{
+    height: 35px;
+    font-size: 11px;
+    line-height: 13.31px;
+  }
+  .about__tech{
+    font-size: 11px;
+    line-height: 12.74px;
+    margin: 10px 0 0;
+  }
+  .about__back-end{
+    width: 100px;
+  }
+  .about__front-end{
+    width: calc(100% - 100px);
+  }
+}

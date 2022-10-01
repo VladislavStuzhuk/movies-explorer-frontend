@@ -1,0 +1,85 @@
+.sign{
+  margin: 70px auto;
+  width: 396px;
+}
+.sign__form{
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+}
+.sign__input{
+  background: none;
+  padding: 5px 0 10px;
+  border: none;
+  border-bottom: 1px solid #424242;
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  color: #fff;
+}
+.sign__text{
+  margin: 0;
+  color: #8B8B8B;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 12px;
+  padding-top: 24px;
+}
+.sign__submit-button{
+  margin-top: 221px;
+  border: none;
+  background: rgba(66, 133, 244, 1);
+  border-radius: 3px;
+  padding-top: 13px;
+  padding-bottom: 15px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  text-align: center;
+  color: #fff;
+  transition: background 0.2s;
+}
+.sign__submit-button:hover{
+  background: rgba(66, 133, 244, 0.6);
+}
+.sign__question{
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17px;
+  text-align: center;
+  color: #8b8b8b;
+  margin: 16px 0 0;
+}
+.sign__redirect-button{
+  color:#4285F4;
+  transition: opacity 0.2s;
+  text-decoration: none;
+}
+.sign__redirect-button:hover{
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 768px) {
+  .sign{
+    margin: 232px auto;
+  }
+  
+}
+@media screen and (max-width: 500px) {
+  .sign{
+    margin-top: 80px;
+    margin: 56px auto 30px;
+    width: 260px;
+  }
+  .sign__submit-button{
+    margin-top:309px;
+  }
+  .sign__question{
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 15px;
+    margin: 14px 0 0;
+  }
+  
+}

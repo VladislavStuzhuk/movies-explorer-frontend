@@ -1,0 +1,9 @@
+@import url("./vendor/normalize.css");
+@import url("./vendor/fonts/fonts.css");
+
+
+body{
+  background: #202020;
+  font-family: "Inter", "Arial ", sans-serif; 
+  min-width: 320px; 
+}

@@ -1,0 +1,77 @@
+.movie{
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  max-width: 360px;
+  justify-self: center;
+}
+.movie__save{
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 9px;
+  text-align: center;
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  background-color: #313131;
+  padding: 6px 7px;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.movie__save_active{
+  opacity: 1;
+  width: 21px;
+  height: 21px;
+  padding: 0;
+  background-color: #EE3465;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('../../images/save-btn-active.svg');
+}
+.movie__save:hover{
+  opacity: 1;
+}
+.movie__link:hover + .movie__save{
+  opacity: 1;
+}
+.movie__image{
+  width: 100%;
+}
+.movie__description{
+  display: flex;
+  margin: 14px 14px 28px;
+  justify-content: space-between;
+}
+.movie__title{
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #fff;
+  margin: 0;
+}
+.movie__duration{
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 10px;
+  color: #8b8b8b;
+  background-color: #2F2F2F;
+  border-radius: 3px;
+  text-align: center;
+  padding: 3px 4px;
+  margin: 0;
+}
+
+@media screen and (max-width: 500px) {
+  .movie__title{
+    font-size: 12px;
+    line-height: 15px;
+  }
+  .movie__save{
+    top:10px;
+    right:10px
+  }
+}
