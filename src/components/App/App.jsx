@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-
-import logo from '../../logo.svg';
 import './App.css';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
