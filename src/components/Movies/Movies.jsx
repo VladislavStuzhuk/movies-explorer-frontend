@@ -14,23 +14,25 @@ function Movies(props) {
     sideBarOpen,
   } = props;  
   return (
-    <div className="movies">
+    <>
       <Header
         onClickNavBtn={sideBarOpen}
       />
-      <SearchForm/>
-      <MoviesCardList 
-        moviesCards = {moviesList}
-      />
-      <MoreMoviesButton
-        isVisible = {true}
-      />
+      <main>
+        <SearchForm/>
+        <MoviesCardList 
+          moviesCards = {moviesList}
+        />
+        <MoreMoviesButton
+          isVisible = {true}
+        />
+        <SideBar
+          isOpen={isSideBar}
+          onClose={sideBarClose}
+        />
+      </main>
       <Footer/>
-      <SideBar
-        isOpen={isSideBar}
-        onClose={sideBarClose}
-      />
-    </div>
+    </>
  )
 }
 export default Movies;

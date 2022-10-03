@@ -14,7 +14,7 @@ function Profile(props) {
       <Header
         onClickNavBtn={sideBarOpen}
       />
-      <section className='profile__container'>
+      <main className='profile__container'>
         <h2 className='profile__header'>Привет, Влад!</h2>
         <div className='profile__name'>
           <p className='profile__text'>Имя</p>
@@ -28,11 +28,11 @@ function Profile(props) {
           <button className='profile__button'>Редактировать</button>
           <button className='profile__button profile__button_red'>Выйти из аккаунта</button>
         </div>
-      </section>
       <SideBar
         isOpen={isSideBar}
         onClose={sideBarClose}
       />
+      </main>
     </>
  )
 }

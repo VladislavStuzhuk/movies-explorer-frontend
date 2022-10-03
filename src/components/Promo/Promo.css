@@ -2,6 +2,7 @@
   width: calc(100% - 80px);
   min-height: 493px;
   margin: auto;
+  border-radius: 10px;
   background: #272727;
 }
 .promo__header{

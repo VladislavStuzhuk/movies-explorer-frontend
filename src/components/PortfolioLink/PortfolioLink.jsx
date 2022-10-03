@@ -8,7 +8,9 @@ function PortfolioLink(props) {
   return (
       <div className='container'>
         <a href={data.src} rel="noreferrer" target="_blank" className="container__link">{data.title}</a>
-        <img src={logoLink} className="container__icon" alt=""/>
+        <a href={data.src} rel="noreferrer" target="_blank" className="container__link">
+          <img src={logoLink} className="container__icon" alt=""/>
+        </a>
       </div>
  )
 }

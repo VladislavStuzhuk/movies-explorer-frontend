@@ -13,7 +13,9 @@ function Header(props) {
   } = props
   return (
     <header className="header">
-      <img className="header__logo" src={logo} alt=""/>
+      <Link to="/" className="header__logo_link"> 
+        <img className="header__logo" src={logo} alt=""/>
+      </Link>
       <div className="header__nav">
         {!loggedIn ? 
           <>           
@@ -21,7 +23,7 @@ function Header(props) {
                 Регистрация
             </Link>          
             <Link to="/sign-in"> 
-              <button className="header__nav_sign-in">
+              <button className="header__nav_sign-in" type='button'>
                 Войти
               </button>
             </Link>
@@ -42,6 +44,7 @@ function Header(props) {
             </div>
             <button className='header__nav_btn'
                     onClick={onClickNavBtn}
+                    type='button'
             >
               <img src={navBtn} alt=""/>
             </button>

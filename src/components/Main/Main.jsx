@@ -15,21 +15,24 @@ function Main(props) {
     sideBarOpen,
   } = props;
   return (
-    <main className="App">
+    <>
       <Header
-        onClickNavBtn={sideBarOpen}
-      />
-      <Promo/>
-      <AboutProject/>
-      <Techs/>
-      <AboutMe/>
-      <Portfolio/>
+          onClickNavBtn={sideBarOpen}
+        />
+        
+      <main className="App">
+        <Promo/>
+        <AboutProject/>
+        <Techs/>
+        <AboutMe/>
+        <Portfolio/>
+        <SideBar
+          isOpen={isSideBar}
+          onClose={sideBarClose}
+        />
+      </main>
       <Footer/>
-      <SideBar
-        isOpen={isSideBar}
-        onClose={sideBarClose}
-      />
-    </main>
+    </>
  )
 }
 export default Main;

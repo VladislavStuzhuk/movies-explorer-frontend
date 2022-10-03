@@ -14,23 +14,25 @@ function SavedMovies(props) {
     sideBarOpen,
   } = props;  
   return (
-    <div className="movies">
+    <>
       <Header
         onClickNavBtn={sideBarOpen}
       />
-      <SearchForm/>
-      <MoviesCardList
-        moviesCards = {SavedMoviesList}
-      />
-      <MoreMoviesButton
-        isVisible = {false}
-      />
+      <main>
+        <SearchForm/>
+        <MoviesCardList
+          moviesCards = {SavedMoviesList}
+        />
+        <MoreMoviesButton
+          isVisible = {false}
+        />
+        <SideBar
+          isOpen={isSideBar}
+          onClose={sideBarClose}
+        />
+      </main>
       <Footer/>
-      <SideBar
-        isOpen={isSideBar}
-        onClose={sideBarClose}
-      />
-    </div>
+    </>
  )
 }
 export default SavedMovies;

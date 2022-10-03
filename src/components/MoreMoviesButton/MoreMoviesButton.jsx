@@ -8,6 +8,7 @@ function MoreMoviesButton(props) {
     <div className='more-btn__container'>
       <button 
         className={`more-btn__button ${(isVisible) ? '' : 'more-btn__button_disable'}`}
+        type='button'
       >
         Ещё
       </button>

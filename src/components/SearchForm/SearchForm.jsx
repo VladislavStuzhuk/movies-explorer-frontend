@@ -8,8 +8,8 @@ function SearchForm() {
   return (
     <section className='search-form'>
       <form className="search-form__container">
-        <input className="search-form__input" placeholder='Фильм'/>
-        <button className='search-form__button'> 
+        <input className="search-form__input" required placeholder='Фильм'/>
+        <button className='search-form__button' type='button'> 
           <img src={searchBtn} alt='поиск'/>
         </button>
         <div className='search-form__checkbox-container'>

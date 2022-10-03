@@ -15,7 +15,11 @@ function MoviesCard(props) {
         <a href={data.trailerLink} target="__blank" rel="noreferrer" className='movie__link'>
           <img src={data.image} alt={data.nameRu} className='movie__image'/>
         </a>
-        <button onClick={handleSaveBtnClick} className={`movie__save ${(isSaveButtonActive) ? 'movie__save_active' : ""}`}>
+        <button 
+          onClick={handleSaveBtnClick} 
+          className={`movie__save ${(isSaveButtonActive) ? 'movie__save_active' : ""}`}
+          type='button'
+        >
            { (isSaveButtonActive) ? '' : 'Сохранить'}
         </button>
       <div className='movie__description'>
