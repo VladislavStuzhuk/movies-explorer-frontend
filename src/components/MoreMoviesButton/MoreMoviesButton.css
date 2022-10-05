@@ -1,0 +1,25 @@
+.more-btn__button{
+  width: 320px;
+  padding: 11px 60px;
+  border: none;
+  background-color: #2F2F2F;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 15px;
+  border-radius: 6px;
+}
+.more-btn__container{
+  text-align: center;
+  margin: 50px auto 80px;
+  height: 10px;
+}
+.more-btn__button_disable{
+  display: none;
+}
+@media screen and (max-width: 500px) {
+  .more-btn__button{
+    width: 240px;
+    padding: 11px 20px;
+  }
+}
