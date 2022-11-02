@@ -1,16 +1,30 @@
-import React from 'react';
-import { useLocation, Route, Link} from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import {Link} from 'react-router-dom';
+import SideBar from '../SideBar/SideBar';
 import logo from '../../images/logo.svg';
 import profileLogo from '../../images/profile-logo.svg';
 import navBtn from '../../images/nav-btn.svg';
 
 import './Header.css';
-const loggedIn = true;
+
 
 function Header(props) {
   const {
+    loggedIn,
     onClickNavBtn
   } = props
+
+  const [isSideBarOpen, setSideBarOpen] = useState(false);
+  function handleSideBarBtn(){
+    setSideBarOpen(true);
+    console.log(isSideBarOpen);
+  }
+  
+  function closeSideBar(){
+    setSideBarOpen(false);
+    console.log(isSideBarOpen);
+  }
+  
   return (
     <header className="header">
       <Link to="/" className="header__logo_link"> 
@@ -43,7 +57,7 @@ function Header(props) {
               </Link>
             </div>
             <button className='header__nav_btn'
-                    onClick={onClickNavBtn}
+                    onClick={handleSideBarBtn}
                     type='button'
             >
               <img src={navBtn} alt=""/>
@@ -51,6 +65,10 @@ function Header(props) {
           </>
         }
       </div>
+      <SideBar
+        isOpen={isSideBarOpen}
+        onClose={closeSideBar}
+      />
     </header>
   )
 }

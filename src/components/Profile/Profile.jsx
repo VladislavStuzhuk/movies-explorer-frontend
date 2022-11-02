@@ -1,38 +1,58 @@
 import React from 'react';
 import Header from '../Header/Header';
-import SideBar from '../SideBar/SideBar';
 
 import './Profile.css'
 function Profile(props) {
   const {
-    isSideBar,
-    sideBarClose,
-    sideBarOpen,
+    loggedIn,
+    onUpdate,
+    onSignOut,
+    currentUser,
   } = props;
+
+  const NameRef = React.useRef('');
+  const EmailRef = React.useRef('');
+
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+    onUpdate({
+     "name": NameRef.current.value,
+     "email": EmailRef.current.value, 
+    })
+    NameRef.current.value = "";
+    EmailRef.current.value = "";
+ }
   return (
     <>
       <Header
-        onClickNavBtn={sideBarOpen}
+        loggedIn={loggedIn}
       />
-      <main className='profile__container'>
-        <h2 className='profile__header'>Привет, Влад!</h2>
+      <form className='profile__container'>
+        <h2 className='profile__header'>Привет, {currentUser.name}</h2>
         <div className='profile__name'>
           <p className='profile__text'>Имя</p>
-          <p className='profile__text'>Влад</p>
+          <input 
+            className='profile__text profile__input'
+            placeholder={currentUser.name}
+            required
+            ref={NameRef}
+          />
         </div>
         <div className='profile__email'>
           <p className='profile__text'>E-mail</p>
-          <p className='profile__text'>pochta@gm.com</p>
+          <input 
+            className='profile__text profile__input'
+            placeholder={currentUser.email}
+            required
+            type='email'
+            ref={EmailRef}
+          />
         </div>
         <div className='profile__buttons'>
-          <button className='profile__button'>Редактировать</button>
-          <button className='profile__button profile__button_red'>Выйти из аккаунта</button>
+          <button className='profile__button' onClick={handleSubmit}>Редактировать</button>
+          <button className='profile__button profile__button_red' onClick={onSignOut}>Выйти из аккаунта</button>
         </div>
-      <SideBar
-        isOpen={isSideBar}
-        onClose={sideBarClose}
-      />
-      </main>
+      </form>
     </>
  )
 }

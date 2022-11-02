@@ -1,4 +1,4 @@
-import movielogo from '../images/film-logo.png'
+
 export const techCards = [
   'HTML',
   'CSS',
@@ -25,71 +25,7 @@ export const portfolioLinks = [
     src: 'yandex.ru',
   },
 ]
-
-export const moviesList = [
-  {
-    movieId: 1,
-    trailerLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
-    image: movielogo,
-    nameRu: 'Баския: Взрыв реальности',
-    duration: '1ч 17м',
-  },
-  {
-    movieId: 2,
-    trailerLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
-    image: movielogo,
-    nameRu: 'Баския: Взрыв реальности',
-    duration: '1ч 17м',
-  },
-  {
-    movieId: 3,
-    trailerLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
-    image: movielogo,
-    nameRu: 'Баския: Взрыв реальности',
-    duration: '1ч 17м',
-  },
-  {
-    movieId: 4,
-    trailerLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
-    image: movielogo,
-    nameRu: 'Баския: Взрыв реальности',
-    duration: '1ч 17м',
-  },
-  {
-    movieId: 5,
-    trailerLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
-    image: movielogo,
-    nameRu: 'Баския: Взрыв реальности',
-    duration: '1ч 17м',
-  },
-  {
-    movieId: 6,
-    trailerLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
-    image: movielogo,
-    nameRu: 'Баския: Взрыв реальности',
-    duration: '1ч 17м',
-  },
-];
-export const SavedMoviesList = [
-  {
-    movieId: 1,
-    trailerLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
-    image: movielogo,
-    nameRu: 'Баския: Взрыв реальности',
-    duration: '1ч 17м',
-  },
-  {
-    movieId: 2,
-    trailerLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
-    image: movielogo,
-    nameRu: 'Баския: Взрыв реальности',
-    duration: '1ч 17м',
-  },
-  {
-    movieId: 3,
-    trailerLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
-    image: movielogo,
-    nameRu: 'Баския: Взрыв реальности',
-    duration: '1ч 17м',
-  },
-]
+export const errorsTetxt={
+  emailConflict: 'Пользователь с данным e-mail уже зарегестрирован.',
+  login: 'Неправильная почта или пароль.',
+}

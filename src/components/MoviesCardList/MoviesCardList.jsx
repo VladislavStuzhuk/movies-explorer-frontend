@@ -3,13 +3,22 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 
 import './MoviesCardList.css'
 function MoviesCardList(props) {
-  console.log(props);
-  const { moviesCards } = props
+  const { 
+    moviesCards,
+    savedMovies,
+    onSaveHandler, 
+    onDeleteHandler,
+  } = props;
   return (
     <section className='movies-list'>
       {moviesCards.map((data) =>{
-            console.log(data);
-              return <MoviesCard key={data.movieId} data={data}/>
+              return <MoviesCard 
+                        savedMovies={savedMovies}
+                        onSaveHandler={onSaveHandler}
+                        onDeleteHandler={onDeleteHandler}
+                        key={data.id || data._id}
+                        data={data}
+                     />
           })}      
     </section>
  )

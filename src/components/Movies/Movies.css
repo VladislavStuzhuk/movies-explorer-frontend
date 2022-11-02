@@ -1,0 +1,9 @@
+.movie__nothing-found{
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  margin: 0;
+}

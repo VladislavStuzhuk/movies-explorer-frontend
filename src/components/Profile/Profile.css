@@ -17,6 +17,15 @@
   line-height: 13px;
   margin: 0;
 }
+.profile__input{
+  background: rgba(0,0,0,0);
+  color:#fff;
+  border: none;
+}
+.profile__input::placeholder{
+  color: #fff;
+  text-align: end;
+}
 .profile__name{
   display: flex;
   justify-content: space-between;

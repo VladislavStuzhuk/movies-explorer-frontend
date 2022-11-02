@@ -21,22 +21,22 @@ function SideBar(props) {
         </button>
         <ul className='side-bar__container'>
           <li>
-            <Link to="/" className="side-bar__container_links"> 
+            <Link to="/" onClick={onClose} className="side-bar__container_links"> 
             Главная
             </Link>
           </li>          
           <li>
-            <Link to="/movies" className="side-bar__container_links"> 
+            <Link to="/movies" onClick={onClose} className="side-bar__container_links"> 
               Фильмы
             </Link>          
           </li>
           <li>
-            <Link to="/saved-movies" className="side-bar__container_links"> 
+            <Link to="/saved-movies" onClick={onClose} className="side-bar__container_links"> 
               Сохранённые фильмы
             </Link>          
           </li>
           <li>
-            <Link to="/profile" className="side-bar__container_links side-bar__container_profile"> 
+            <Link to="/profile" onClick={onClose} className="side-bar__container_links side-bar__container_profile"> 
               Аккаунт
               <img className="header__nav_logo side-bar__container_profile-logo" src={profileLogo} alt=""/>
             </Link>
