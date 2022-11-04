@@ -7,6 +7,7 @@ function MoviesCard(props) {
     data,
     onSaveHandler,
     onDeleteHandler,
+    isSavedPage,
       } = props;
   const [isSaved, setIsSaved] = useState(false)
   
@@ -19,7 +20,6 @@ function MoviesCard(props) {
   function handleSaveBtnClick(){
     if(isSaved){
       const movieRemoveId = (savedMovies.find((movie) =>  (movie.movieId === data.id) || (movie.movieId === data.movieId))._id)
-      console.log(movieRemoveId)
       onDeleteHandler(movieRemoveId, setIsSaved)
     }
     if(!isSaved){
@@ -46,7 +46,7 @@ function MoviesCard(props) {
         </a>
         <button 
           onClick={handleSaveBtnClick} 
-          className={`movie__save ${(isSaved) ? 'movie__save_active' : ""}`}
+          className={`movie__save ${(isSaved) ? `movie__save_active ${(isSavedPage)? 'movie__delete' : ''}` : ""} `}
           type='button'
         >
            { (isSaved) ? '' : 'Сохранить'}

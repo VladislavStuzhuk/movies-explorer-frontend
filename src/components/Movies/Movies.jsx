@@ -8,24 +8,25 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import MoreMoviesButton from '../MoreMoviesButton/MoreMoviesButton';
 import Preloader from "../Preloader/Preloader.jsx";
-import { filterMovies, filterOnlyLongMovies } from '../../utils/filters';
+import { filterMovies, filterOnlyShortMovies } from '../../utils/filters';
+import { DISPLAY_NEXT_MOVIE_MOBILE, DISPLAY_NEXT_MOVIES_TABLET, DISPLAY_NEXT_MOVIES_LAPTOP, TABLET_WIDTH,LAPTOP_WIDTH } from '../../utils/constants'
 
 function Movies(props) {
   const {
     loggedIn,
+    onSignOut,
     allMovies,
     savedMovies,
     setSavedMovies,
   } = props;
-  const [isNothingFound, setNothingFound] = useState(false);
+  const [isError, setError] = useState(false);
   const [movies, setMovies] = useState([]);
   const [allFilteredMovies, setAllFilteredMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isBtnVisible, setBtnVisible] = useState(false)
   const [cardsAmount, setCardsAmount] =  useState(0);
-  const [cardsPages, setCardsPages] = useState(0);
-  const [cardsLoad, setCardsLoad] = useState(0);
-  let cardsCount = cardsAmount + cardsLoad * cardsPages;
+  const [errorMessage, setErrorMessage] = useState(0);
+  
 
   useEffect(() => {  
     const previousMovies = JSON.parse(localStorage.getItem("previousMoviesData"));
@@ -35,31 +36,33 @@ function Movies(props) {
   }, [])
   let width = window.innerWidth;
   useEffect(() => {
-    if (width >= 1280) {
+    if (width >= LAPTOP_WIDTH) {
       setCardsAmount(12);
-      setCardsLoad(3);
-    } else if (width > 500 && width < 1280) {
+    } else if (width >= TABLET_WIDTH && width < LAPTOP_WIDTH) {
       setCardsAmount(8);
-      setCardsLoad(2);
-    } else if (width <= 500) {
+    } else if (width < TABLET_WIDTH) {
       setCardsAmount(5);
-      setCardsLoad(1);
     }
-  }, [width]);
+  }, []);
 
   useEffect(() => {
-    setMovies(allFilteredMovies.slice(0, cardsCount));
-    cardsCount < allFilteredMovies.length ? setBtnVisible(true): setBtnVisible(false)
-  }, [allFilteredMovies, cardsCount])
+    setMovies(allFilteredMovies.slice(0, cardsAmount));
+    cardsAmount < allFilteredMovies.length ? setBtnVisible(true): setBtnVisible(false)
+  }, [allFilteredMovies, cardsAmount])
 
-
+  function errorsHandler(message, isError){
+    setError(isError);
+    setErrorMessage(message);
+  }
   function saveMovieHandler(movie, setLike){
      api.saveMovie(movie)
      .then((newMovie) => {
       setSavedMovies([...savedMovies, newMovie])
       setLike(true)
      })
-     .catch(err=>console.log(err));
+     .catch((err)=>{
+       if (err.status ===401) onSignOut();
+     });
   };
   
   function deleteMovieHandler(movieId,setLike){
@@ -71,24 +74,40 @@ function Movies(props) {
       setLike(false)
       }
      )
-     .catch(err=>console.log(err));
+    .catch((err)=>{
+      if (err.status ===401) onSignOut();
+    });
   }
   async function submitFormHandler(search, checkbox){
     setIsLoading(true);
-    localStorage.removeItem('previousMoviesData')
-    let filteredMovies;
-    if (checkbox) {
-      filteredMovies = (filterMovies(search, allMovies))
-    } else{
-      filteredMovies = (filterOnlyLongMovies(search, allMovies))
-    };
-    (filteredMovies.length === 0) ? setNothingFound(true) : setNothingFound(false) 
-    await setAllFilteredMovies(filteredMovies);
-    localStorage.setItem('previousMoviesData', JSON.stringify(filteredMovies));
-    setIsLoading(false);
+    setTimeout(() => {
+      if (search){
+        localStorage.removeItem('previousMoviesData')
+        let filteredMovies;
+        if (!checkbox) {
+          filteredMovies = (filterMovies(search, allMovies))
+        } else{
+          filteredMovies = (filterOnlyShortMovies(search, allMovies))
+        };
+        (filteredMovies.length === 0) ? errorsHandler("Ничего не найдено :-(",true) : errorsHandler('',false) 
+         setAllFilteredMovies(filteredMovies);
+        localStorage.setItem('previousMoviesData', JSON.stringify(filteredMovies));
+      } else {
+        setAllFilteredMovies([]);
+        errorsHandler("Введите ключевое слово", true)
+      }
+      setIsLoading(false);
+    }, 600);
   }
-  const moreButtonHandler = () =>
-    setCardsPages((prev) => prev + 1);
+  const displayMoreMovieHandler = () => {
+    if (window.innerWidth >= LAPTOP_WIDTH ){
+      setCardsAmount(cardsAmount + DISPLAY_NEXT_MOVIES_LAPTOP)
+    } else if (window.innerWidth >= TABLET_WIDTH && window.innerWidth <LAPTOP_WIDTH) {
+      setCardsAmount(cardsAmount + DISPLAY_NEXT_MOVIES_TABLET)
+    } else if (window.innerWidth < TABLET_WIDTH) {
+    setCardsAmount(cardsAmount + DISPLAY_NEXT_MOVIE_MOBILE)
+  } 
+  }
   return (
     <>
       <Header
@@ -108,11 +127,11 @@ function Movies(props) {
           />
          }
          {
-          isNothingFound? 
-          <p className="movie__nothing-found">Ничего не найдено :-(</p> :
+          isError && !isLoading? 
+          <p className="movie__nothing-found">{errorMessage} </p> :
           <MoreMoviesButton
             isVisible = {isBtnVisible}
-            moreMovies = {moreButtonHandler}
+            moreMovies = {displayMoreMovieHandler}
           />
          }
       </main>

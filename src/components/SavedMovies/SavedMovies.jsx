@@ -6,45 +6,44 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import MoreMoviesButton from '../MoreMoviesButton/MoreMoviesButton';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import { filterMovies, filterOnlyLongMovies } from '../../utils/filters';
+import { filterMovies, filterOnlyShortMovies } from '../../utils/filters';
 
 function SavedMovies(props) {
   const {
     loggedIn,
     savedMovies,
     setSavedMovies,
+    onSignOut,
   } = props;  
-  const [moviesCyka, setMoviesCyka] = useState(savedMovies);
+  const [moviesForRender, setMoviesForRender] = useState(savedMovies);
   const [isNothingFound, setNothingFound] = useState(false);
   
   useEffect(() => {
-    setMoviesCyka(savedMovies)
-    console.log(moviesCyka)
+    setMoviesForRender(savedMovies)
   }, [savedMovies]); 
 
   
   function deleteMovieHandler(movieId,setLike){
-    console.log(movieId)
-    console.log(savedMovies)
     api.deleteMovie(movieId)
     .then(()=>{
         setLike(false)
         setSavedMovies((state) =>
             state.filter((m) => m._id !== movieId)
           );
-        console.log(moviesCyka)
      })
-     .catch(err=>console.log(err));
+     .catch((err)=>{
+       if (err.status ===401) onSignOut();
+     });
   }
   function submitFormHandler(search, checkbox){
     let filteredMovies;
-    if (checkbox) {
+    if (!checkbox) {
       filteredMovies = (filterMovies(search, savedMovies))
     } else{
-      filteredMovies = (filterOnlyLongMovies(search, savedMovies))
+      filteredMovies = (filterOnlyShortMovies(search, savedMovies))
     };
     (filteredMovies.length === 0) ? setNothingFound(true) : setNothingFound(false) 
-    setMoviesCyka(filteredMovies);
+    setMoviesForRender(filteredMovies);
   }
   return (
     <>
@@ -59,7 +58,8 @@ function SavedMovies(props) {
         <MoviesCardList
           savedMovies={savedMovies}
           onDeleteHandler={deleteMovieHandler}
-          moviesCards = {moviesCyka}
+          moviesCards = {moviesForRender}
+          isSavedPage={true}
         />
         }
         {

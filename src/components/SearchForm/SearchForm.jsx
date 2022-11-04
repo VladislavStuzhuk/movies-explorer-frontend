@@ -5,7 +5,7 @@ import Checkbox from '../Checkbox/Checkbox';
 import './SearchForm.css'
 function SearchForm(props) {
   const {onSubmit} = props;
-  const [isChecked, setIsChecked] = useState(true);
+  const [isChecked, setIsChecked] = useState(false);
   const searchRef = React.useRef('');
 
   useEffect(() => {  
@@ -29,14 +29,23 @@ function SearchForm(props) {
     }
     onSubmit(searchRef.current.value, isChecked)
   }
+
   function onCheckBoxChange(){
     console.log(isChecked);
     isChecked ? setIsChecked(false) : setIsChecked(true);
+    if (window.location.href.includes('/movies')){
+      const prevReq = {
+        'input': searchRef.current.value,
+        'checkbox': !isChecked,
+      }
+      localStorage.setItem('previousRequest', JSON.stringify(prevReq))
+    }
+    onSubmit(searchRef.current.value, !isChecked)
   }
   return (
     <section className='search-form'>
       <form className="search-form__container" onSubmit={submitHandler}>
-        <input className="search-form__input" ref={searchRef}required placeholder='Фильм'/>
+        <input className="search-form__input" ref={searchRef} placeholder='Фильм'/>
         <button className='search-form__button' type='submit'> 
           <img src={searchBtn} alt='поиск'/>
         </button>

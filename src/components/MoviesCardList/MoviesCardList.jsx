@@ -8,6 +8,7 @@ function MoviesCardList(props) {
     savedMovies,
     onSaveHandler, 
     onDeleteHandler,
+    isSavedPage,
   } = props;
   return (
     <section className='movies-list'>
@@ -16,6 +17,7 @@ function MoviesCardList(props) {
                         savedMovies={savedMovies}
                         onSaveHandler={onSaveHandler}
                         onDeleteHandler={onDeleteHandler}
+                        isSavedPage={isSavedPage}
                         key={data.id || data._id}
                         data={data}
                      />

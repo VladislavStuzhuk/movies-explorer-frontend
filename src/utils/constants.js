@@ -29,3 +29,10 @@ export const errorsTetxt={
   emailConflict: 'Пользователь с данным e-mail уже зарегестрирован.',
   login: 'Неправильная почта или пароль.',
 }
+
+export const SHORT_MOVIE_DURATION = 40;
+export const TABLET_WIDTH = 690;
+export const LAPTOP_WIDTH = 1100;
+export const DISPLAY_NEXT_MOVIES_LAPTOP = 3;
+export const DISPLAY_NEXT_MOVIES_TABLET = 2;
+export const DISPLAY_NEXT_MOVIE_MOBILE = 1;

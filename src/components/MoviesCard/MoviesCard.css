@@ -32,6 +32,11 @@
   background-position: center;
   background-image: url('../../images/save-btn-active.svg');
 }
+.movie__delete{
+  opacity: 0;
+  background-color: #313131;
+  background-image: url('../../images/delete-btn.svg');
+}
 .movie__save:hover{
   opacity: 1;
 }

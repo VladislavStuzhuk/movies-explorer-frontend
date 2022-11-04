@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import SignHeader from '../SignHeader/SignHeader';
 
@@ -8,16 +8,28 @@ function Register(props) {
     errorMessage,
   } = props
   
-  const NameRef = React.useRef('');
-  const EmailRef = React.useRef('');
-  const PasswordRef = React.useRef('');
+  const [isDisabled, setIsDisabled] = useState(true)
+  const [validateErr,setValidateErr] = useState('')
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+ 
+  useEffect(()=>{
+    if (!name || !email || !password) setIsDisabled(true) 
+    else setIsDisabled(false);
+  },[name, email, password])
+  
+  useEffect(()=>{
+    setValidateErr(errorMessage)
+  },[errorMessage])
 
   const handleSubmit = (e) =>{
      e.preventDefault();
+     setIsDisabled(true)
      onRegister({
-      "name": NameRef.current.value,
-      "password": PasswordRef.current.value,
-      "email": EmailRef.current.value, 
+      "name": name,
+      "password": password,
+      "email": email, 
      })
   }
 
@@ -28,28 +40,23 @@ function Register(props) {
         <p className='sign__text'>Имя</p>
         <input 
           className="sign__input" 
-          ref={NameRef}
-          required
+          onChange={e => setName(e.target.value)}
         />
         <p className='sign__text'>E-mail</p>
         <input 
           className="sign__input" 
-          ref={EmailRef}
-          type="email"
-          required
+          onChange={e => setEmail(e.target.value)}
         />
         <p className='sign__text'>Пароль</p>
         <input 
           className="sign__input" 
           type="password"
-          ref={PasswordRef}
-          required
-          minLength={8}
+          onChange={e => setPassword(e.target.value)}
         />
         {
-         (errorMessage) ? <p className='sign__error'>{errorMessage}</p> : <p></p>
+         (validateErr) ? <p className='sign__error'>{validateErr}</p> : <p></p>
         }
-        <button className="sign__submit-button">Зарегистрироваться</button>
+        <button className="sign__submit-button" disabled={isDisabled}>Зарегистрироваться</button>
         <p className='sign__question'>
         Уже зарегистрированы?&nbsp;
           <Link to="/sign-in" className="sign__redirect-button">

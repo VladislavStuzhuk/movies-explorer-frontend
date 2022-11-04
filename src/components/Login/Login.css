@@ -40,9 +40,13 @@
   color: #fff;
   transition: background 0.2s;
 }
+.sign__submit-button:disabled{
+  background: rgba(66, 133, 244, 0.6);
+  cursor: default;
+}
 .sign__error{
   margin: 0;
-  color: #ff0000;
+  color:#EE3465;
   font-size: 12px;
   font-weight: 400;
   line-height: 12px;

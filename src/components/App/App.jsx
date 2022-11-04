@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Redirect, Route, Switch, useHistory  } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import './App.css';
 import auth from '../../utils/auth.js';
 import api from '../../utils/MainApi.js';
@@ -17,7 +17,6 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 import { CurrentUserContext } from '../../context/CurrentUserContext';
 
-console.log(CurrentUserContext)
 function App() {
   
   let allMovies = JSON.parse(localStorage.getItem("allMoviesData"));
@@ -28,22 +27,32 @@ function App() {
   const [savedMovies, setSavedMovies] = useState([]);
   const [registerError, setRegisterError] = useState("")
   const [loginError, setLoginError] = useState("")
-  const [updateError, setUpdateError] = useState("")
+  const [errorOnUpdate, setUpdateError] = useState("")
   const [loggedIn, setLoggedIn] = useState(false);
 
   const history = useHistory();
-
+  const location = useLocation();
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
     if (jwt){
       auth.checkToken(jwt).
         then(res => {
           setLoggedIn(true);
-          history.push("/movies");
+          if (location.pathname === "/signup" || location.pathname === "/signin") {
+            history.push("/movies");
+          } else {
+            history.push(location.pathname);
+          }
         }).
-      catch(err => console.log(err))
-    }  
-  },[history, loggedIn])
+      catch((err) => {
+        console.log(err);
+        handleSignOut();
+      })
+    } else{
+      localStorage.removeItem('previousMoviesData')
+      localStorage.removeItem("previousRequest")
+    } 
+  },[ loggedIn])
 
    //Получение информации о пользователе 
   useEffect(() => {
@@ -78,98 +87,99 @@ function App() {
   }, [currentUser])
 
   function handleUpdateProfile(data){
-    api.patchUserInfo(data).
-    then(user => setCurrentUser(user.data)).
-    catch(err => {
+    api.patchUserInfo(data)
+    .then(user => setCurrentUser(user.data))
+    .catch(err => {
       if (err.status ===409) setUpdateError('Пользователь с данным e-mail уже зарегестрирован.');
     });
   }
   
   function handleRegister(data){
-    auth.register(data).
-    then(
-      data =>{
-        history.push('sign-in');
-      },
-      err =>{
+    auth.register(data)
+    .then(res =>{
+        handleLogin({email: data.email, password: data.password})
+      })
+    .catch((err) =>{
         if (err.status ===409) setRegisterError('Пользователь с данным e-mail уже зарегестрирован.');
       }
     )
   }
   
   function handleLogin(data){
-    auth.login(data).
-      then(
-        res =>{
-          localStorage.setItem('jwt', res.token);
-          setLoggedIn(true);
-          history.push('movies')
-        },
-        err=>{
-          if (err.status ===401) setLoginError('Неправильная почта или пароль.');
-        }
-      )
+    auth.login(data)
+    .then(res =>{
+      localStorage.setItem('jwt', res.token);
+      setLoggedIn(true);
+      history.push('movies')
+    })
+    .catch(err=>{
+        if (err.status ===401) setLoginError('Неправильная почта или пароль.');
+      }
+    )
   }
   
   function handleSignOut(){
     localStorage.removeItem('jwt');
+    localStorage.removeItem('previousMoviesData')
+    localStorage.removeItem("previousRequest")
     setLoggedIn(false);
     history.push('/');
   }
 
   return (
-    <div className='app'>
-      <Switch>
-        <Route exact path="/">
-          <Main
+    
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className='app'>
+        <Switch>
+          <Route exact path="/">
+            <Main
+              loggedIn={loggedIn}
+            />
+          </Route>
+          <Route path="/sign-up">
+            <Register
+            errorMessage={registerError}
+            onRegister={handleRegister} 
+            />
+          </Route> 
+          <Route path="/sign-in">
+            <Login
+              errorMessage={loginError}
+              onLogin={handleLogin}
+            />
+          </Route>
+          <ProtectedRoute
+            path="/movies"
             loggedIn={loggedIn}
+            component={Movies}
+            onSignOut={handleSignOut}
+            allMovies={allMoviesList}
+            savedMovies={savedMovies}
+            setSavedMovies={setSavedMovies}
           />
-        </Route>
-        <Route path="/sign-up">
-          <Register
-           errorMessage={registerError}
-           onRegister={handleRegister} 
-          />
-        </Route> 
-        <Route path="/sign-in">
-          <Login
-            errorMessage={loginError}
-            onLogin={handleLogin}
-          />
-        </Route>
         <ProtectedRoute
-          path="/movies"
-          loggedIn={loggedIn}
-          component={Movies}
-          allMovies={allMoviesList}
-          savedMovies={savedMovies}
-          setSavedMovies={setSavedMovies}
-        />
-       <ProtectedRoute
-          path="/saved-movies"
-          loggedIn={loggedIn}
-          component={SavedMovies}
-          savedMovies={savedMovies}
-          setSavedMovies={setSavedMovies}
-        />
-         <ProtectedRoute
-          path="/profile"
-          loggedIn={loggedIn}
-          errorMessage={updateError}
-          currentUser={currentUser}
-          onUpdate={handleUpdateProfile}
-          onSignOut={handleSignOut}
-          component={Profile}
-        />
-        <Route>
-          <NotFound path="/404" />
-        </Route>
-        <Redirect to="/404"/>
-      </Switch> 
-      
-      
-      
-    </div>
+            path="/saved-movies"
+            loggedIn={loggedIn}
+            component={SavedMovies}
+            onSignOut={handleSignOut}
+            savedMovies={savedMovies}
+            setSavedMovies={setSavedMovies}
+          />
+          <ProtectedRoute
+            path="/profile"
+            loggedIn={loggedIn}
+            errorMessage={errorOnUpdate}
+            onUpdate={handleUpdateProfile}
+            onSignOut={handleSignOut}
+            component={Profile}
+          />
+          <Route>
+            <NotFound path="/404" />
+          </Route>
+          <Redirect to="/404"/>
+        </Switch> 
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 

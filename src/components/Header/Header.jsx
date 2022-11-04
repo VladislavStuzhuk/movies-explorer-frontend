@@ -11,18 +11,15 @@ import './Header.css';
 function Header(props) {
   const {
     loggedIn,
-    onClickNavBtn
   } = props
 
   const [isSideBarOpen, setSideBarOpen] = useState(false);
   function handleSideBarBtn(){
     setSideBarOpen(true);
-    console.log(isSideBarOpen);
   }
   
   function closeSideBar(){
     setSideBarOpen(false);
-    console.log(isSideBarOpen);
   }
   
   return (

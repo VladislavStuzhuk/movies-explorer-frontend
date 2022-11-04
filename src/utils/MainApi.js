@@ -5,7 +5,7 @@ class Api{
   }
   _handleResponse(res) {
     if (!res.ok) {
-      return Promise.reject(`Error: ${res.status}`);
+      return Promise.reject(res);
     }
     return res.json();
   }
