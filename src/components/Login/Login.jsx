@@ -19,21 +19,28 @@ const Login = (props) => {
     if (!email || !password) setIsDisabled(true) 
     else setIsDisabled(false);
   },[email, password])
-  
+
+  useEffect(()=> {
+    if (!isValidEmail(email)){
+      setValidateErr('Введен невалидный E-mail')
+      setIsDisabled(true) 
+    } else {
+      setValidateErr('')
+      if (password) setIsDisabled(false);
+    }
+  },[email])
+
   useEffect(()=>{
     setValidateErr(errorMessage)
   },[errorMessage])
 
   const handleSubmit = (e) =>{
     e.preventDefault();
-    if (!isValidEmail(email)) {
-      setValidateErr('Введен невалидный E-mail')
-    } else {
       onLogin({
         "password": password,
         "email": email, 
       })
-    }
+    
   }
   return(
     <div className="sign">

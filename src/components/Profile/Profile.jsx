@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../Header/Header';
-import {isValidEmail} from '../../utils/validate';
+import {isValidEmail, isValidName} from '../../utils/validate';
 import { CurrentUserContext } from '../../context/CurrentUserContext';
 import './Profile.css'
 function Profile(props) {
@@ -24,30 +24,46 @@ function Profile(props) {
   },[currentUser])
   
   useEffect(()=>{
-    setValidateErr(errorMessage)
-    setValidateOk(false)
+    console.log(errorMessage);
+    if (errorMessage === ""){
+      setValidateErr(errorMessage)
+      setValidateOk(true)
+    } else if (errorMessage !== ''){
+      setValidateErr(errorMessage)
+      setValidateOk(false)
+    }
   },[errorMessage])
 
   useEffect(()=>{
-    if (!name || !email) setIsDisabled(true) 
-    else setIsDisabled(false);
+    setValidateOk(false)
+    if (!name || !email){ 
+      setIsDisabled(true) 
+    } else if (name === currentUser.name && email === currentUser.email){
+      setIsDisabled(true) 
+    } else if (!isValidEmail(email)) {
+      setValidateErr('Введен невалидный E-mail')
+      setIsDisabled(true) 
+    } else if (!isValidName(name)) {
+      setValidateErr('Имя должно состоять из букв, пробела или дефиса')
+      setIsDisabled(true) 
+    } else{
+      setValidateErr('')
+      setIsDisabled(false);
+    }
   },[name, email])
 
   const handleSubmit = (e) =>{
     e.preventDefault();
     setValidateOk(false)
-    if (name === currentUser.name && email === currentUser.email){
-      setValidateErr('Новые имя и E-mail должны отличаться от предыдущих')
-    } else if (!isValidEmail(email)) {
-      setValidateErr('Введен невалидный E-mail')
-    } else {
+    
       onUpdate({
         "name": name,
         "email": email, 
       })
-      setValidateOk(true)
+      if( errorMessage == ''){
+        setValidateOk(true)
+      }
       setValidateErr(''); 
-    }
   }
 
   return (
@@ -74,7 +90,7 @@ function Profile(props) {
             type='email'
           />
         </div>
-        {valedateOk ? <p className='profile__message'>Данные успешно обновлены</p> : <></>}
+        {valedateOk  ? <p className='profile__message'>Данные успешно обновлены</p> : <></>}
         {validateErr ? <p className='sign__error'>{validateErr}</p> : <></>}
         <div className='profile__buttons'>
           <button className='profile__button' onClick={handleSubmit} disabled={isDisabled}>Редактировать</button>

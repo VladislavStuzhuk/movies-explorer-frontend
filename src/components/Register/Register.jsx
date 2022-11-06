@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
+import {isValidEmail, isValidName} from '../../utils/validate';
 import SignHeader from '../SignHeader/SignHeader';
 
 function Register(props) {
@@ -15,10 +16,20 @@ function Register(props) {
   const [email, setEmail] = useState("");
  
   useEffect(()=>{
-    if (!name || !email || !password) setIsDisabled(true) 
-    else setIsDisabled(false);
+    if (!name || !email || !password){ 
+      setIsDisabled(true) 
+    }  else if (!isValidEmail(email)) {
+      setValidateErr('Введен невалидный E-mail')
+      setIsDisabled(true) 
+    } else if (!isValidName(name)) {
+      setValidateErr('Имя должно состоять из букв, пробела или дефиса')
+      setIsDisabled(true) 
+    } else{
+      setValidateErr('')
+      setIsDisabled(false);
+    }
   },[name, email, password])
-  
+
   useEffect(()=>{
     setValidateErr(errorMessage)
   },[errorMessage])

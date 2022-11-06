@@ -88,7 +88,10 @@ function App() {
 
   function handleUpdateProfile(data){
     api.patchUserInfo(data)
-    .then(user => setCurrentUser(user.data))
+    .then(user => {
+      setCurrentUser(user.data)
+      setUpdateError('')
+    })
     .catch(err => {
       if (err.status ===409) setUpdateError('Пользователь с данным e-mail уже зарегестрирован.');
     });
@@ -174,7 +177,10 @@ function App() {
             component={Profile}
           />
           <Route>
-            <NotFound path="/404" />
+            <NotFound 
+              path="/404"
+              prevLocation = {location.pathname}
+            />
           </Route>
           <Redirect to="/404"/>
         </Switch> 

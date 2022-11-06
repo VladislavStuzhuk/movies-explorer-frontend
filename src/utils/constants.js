@@ -35,4 +35,4 @@ export const TABLET_WIDTH = 690;
 export const LAPTOP_WIDTH = 1100;
 export const DISPLAY_NEXT_MOVIES_LAPTOP = 3;
 export const DISPLAY_NEXT_MOVIES_TABLET = 2;
-export const DISPLAY_NEXT_MOVIE_MOBILE = 1;
+export const DISPLAY_NEXT_MOVIE_MOBILE = 2;
