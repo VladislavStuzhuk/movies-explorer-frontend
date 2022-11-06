@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import './App.css';
+import auth from '../../utils/auth.js';
+import api from '../../utils/MainApi.js';
+import movieApi from '../../utils/MoviesApi';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
@@ -12,70 +15,177 @@ import NotFound from '../NotFound/NotFound';
 import './App.css';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
+import { CurrentUserContext } from '../../context/CurrentUserContext';
 
 function App() {
   
-  const [isSideBarOpen, setSideBarOpen] = useState(false);
-  function handleSideBarBtn(){
-    setSideBarOpen(true);
-    console.log(isSideBarOpen);
+  let allMovies = JSON.parse(localStorage.getItem("allMoviesData"));
+
+  const [currentUser, setCurrentUser] = useState({});
+
+  const [allMoviesList, setAllMovies] = useState([]);
+  const [savedMovies, setSavedMovies] = useState([]);
+  const [registerError, setRegisterError] = useState("")
+  const [loginError, setLoginError] = useState("")
+  const [errorOnUpdate, setUpdateError] = useState("")
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const history = useHistory();
+  const location = useLocation();
+  useEffect(() => {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt){
+      auth.checkToken(jwt).
+        then(res => {
+          setLoggedIn(true);
+          if (location.pathname === "/signup" || location.pathname === "/signin") {
+            history.push("/movies");
+          } else {
+            history.push(location.pathname);
+          }
+        }).
+      catch((err) => {
+        console.log(err);
+        handleSignOut();
+      })
+    } else{
+      localStorage.removeItem('previousMoviesData')
+      localStorage.removeItem("previousRequest")
+    } 
+  },[ loggedIn])
+
+   //Получение информации о пользователе 
+  useEffect(() => {
+    api.getUserInfo().
+    then((user)=>{
+      setCurrentUser(user.data);
+    }).
+    catch(err => console.log(err))
+  }, [loggedIn])
+  //Получение фильмов 
+  useEffect(() => {
+    if (!allMovies){
+      movieApi.getMovies().
+      then((data)=>{
+        setAllMovies(data);
+        localStorage.setItem('allMoviesData', JSON.stringify(data));
+      }).catch(err => console.log(err))
+    } else {
+      setAllMovies(allMovies);
+    }
+  }, [loggedIn])
+
+  useEffect(() =>{
+    api.getSavedMovies()
+    .then((data) => {
+      let userMovies = data.filter((movie) => {
+        if (movie.owner === currentUser._id) return movie
+      })
+      setSavedMovies(userMovies)
+    })
+    .catch((err) => console.log(err))
+  }, [currentUser])
+
+  function handleUpdateProfile(data){
+    api.patchUserInfo(data)
+    .then(user => {
+      setCurrentUser(user.data)
+      setUpdateError('')
+    })
+    .catch(err => {
+      if (err.status ===409) setUpdateError('Пользователь с данным e-mail уже зарегестрирован.');
+    });
   }
-  function closeSideBar(){
-    setSideBarOpen(false);
-    console.log(isSideBarOpen);
+  
+  function handleRegister(data){
+    auth.register(data)
+    .then(res =>{
+        handleLogin({email: data.email, password: data.password})
+      })
+    .catch((err) =>{
+        if (err.status ===409) setRegisterError('Пользователь с данным e-mail уже зарегестрирован.');
+      }
+    )
+  }
+  
+  function handleLogin(data){
+    auth.login(data)
+    .then(res =>{
+      localStorage.setItem('jwt', res.token);
+      setLoggedIn(true);
+      history.push('movies')
+    })
+    .catch(err=>{
+        if (err.status ===401) setLoginError('Неправильная почта или пароль.');
+      }
+    )
+  }
+  
+  function handleSignOut(){
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('previousMoviesData')
+    localStorage.removeItem("previousRequest")
+    setLoggedIn(false);
+    history.push('/');
   }
 
   return (
-    <div className='app'>
-      <Switch>
-        <Route exact path="/">
-          <Main
-            isSideBar = {isSideBarOpen}
-            sideBarClose = {closeSideBar}
-            sideBarOpen = {handleSideBarBtn}
+    
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className='app'>
+        <Switch>
+          <Route exact path="/">
+            <Main
+              loggedIn={loggedIn}
+            />
+          </Route>
+          <Route path="/sign-up">
+            <Register
+            errorMessage={registerError}
+            onRegister={handleRegister} 
+            />
+          </Route> 
+          <Route path="/sign-in">
+            <Login
+              errorMessage={loginError}
+              onLogin={handleLogin}
+            />
+          </Route>
+          <ProtectedRoute
+            path="/movies"
+            loggedIn={loggedIn}
+            component={Movies}
+            onSignOut={handleSignOut}
+            allMovies={allMoviesList}
+            savedMovies={savedMovies}
+            setSavedMovies={setSavedMovies}
           />
-        </Route>
-        <Route path="/sign-up">
-          <Register
-           // onRegister={handleRegister} 
-          />
-        </Route> 
-        <Route path="/sign-in">
-          <Login
-           // onLogin={handleLogin}
-          />
-        </Route>
         <ProtectedRoute
-          path="/movies"
-          //loggedIn={loggedIn}
-          component={Movies}
-          isSideBar = {isSideBarOpen}
-          sideBarClose = {closeSideBar}
-          sideBarOpen = {handleSideBarBtn}
-        />
-       <ProtectedRoute
-          path="/saved-movies"
-          //loggedIn={loggedIn}
-          component={SavedMovies}
-          isSideBar = {isSideBarOpen}
-          sideBarClose = {closeSideBar}
-          sideBarOpen = {handleSideBarBtn}
-        />
-         <ProtectedRoute
-          path="/profile"
-          //loggedIn={loggedIn}
-          component={Profile}
-          isSideBar = {isSideBarOpen}
-          sideBarClose = {closeSideBar}
-          sideBarOpen = {handleSideBarBtn}
-        />
-        <Route>
-          <NotFound path="/404" />
-        </Route>
-        <Redirect to="/404"/>
-      </Switch> 
-      
-    </div>
+            path="/saved-movies"
+            loggedIn={loggedIn}
+            component={SavedMovies}
+            onSignOut={handleSignOut}
+            savedMovies={savedMovies}
+            setSavedMovies={setSavedMovies}
+          />
+          <ProtectedRoute
+            path="/profile"
+            loggedIn={loggedIn}
+            errorMessage={errorOnUpdate}
+            onUpdate={handleUpdateProfile}
+            onSignOut={handleSignOut}
+            component={Profile}
+          />
+          <Route>
+            <NotFound 
+              path="/404"
+              prevLocation = {location.pathname}
+            />
+          </Route>
+          <Redirect to="/404"/>
+        </Switch> 
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 

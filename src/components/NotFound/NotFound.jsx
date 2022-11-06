@@ -1,11 +1,13 @@
-import React from "react";
+import React from 'react';
 import { useHistory } from "react-router-dom";
 
 import "./NotFound.css";
 
 const NotFound = () => {
   const history = useHistory();
-  const backHandler = () => history.goBack();
+  const backHandler = () =>{
+    history.goBack()
+  };
 
   return (
     <section className="not-found">
